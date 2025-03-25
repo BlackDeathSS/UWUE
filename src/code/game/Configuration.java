@@ -25,7 +25,7 @@ public class Configuration {
     
     public static final int SOUND = 0, MUSIC = 1, FOOTSTEP = 2;
     
-    public boolean debug = false;
+    public boolean debug = true;
     
     public int musicVolume = 100, soundsVolume = 100, footstepsVolume = 100;
 	public boolean hrtf = true;
@@ -42,7 +42,7 @@ public class Configuration {
             vrw = 320, vrh = 240;
     public int aa = 4;
     
-    public float fov = 70;
+    public float fov = 95;
     
     Configuration(int fwd, int fhd) {
         load(fwd, fhd);

@@ -1,0 +1,21 @@
+Bunker Blaster by Lance Refior
+
+Controls:
+WASD - walk
+Shift - run
+Space - jump
+Arrow keys - look around
+E - interact
+ESC - back
+Enter - confirm
+F2 - save screenshot
+F11 - toggle fullscreen
+
+This game uses these Java libs:
+Lightweight Java Game Library
+Java OpenGL Math Library
+Luaj
+You can find additional information and licenses in "licenses" folder.
+
+2022
+UWUEngine

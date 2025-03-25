@@ -18,7 +18,7 @@ public class BMFont {
     
     public String name;
     private int lineHeight, baseHeight, stretchH;
-    public float baseScale = 1;
+    public float baseScale = 1f;
     
     private Hashtable<Integer, BMChar> chars;
     
