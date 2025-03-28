@@ -3,6 +3,7 @@ package code.game.world;
 import code.audio.AudioEngine;
 
 import code.engine3d.E3D;
+import code.engine3d.Mesh;
 import code.engine3d.instancing.Sprite;
 
 import code.game.Main;
@@ -35,7 +36,8 @@ public class World {
     
     private ArrayList<Entity> entities;
     Node node;
-    MeshInstance[] allMeshes, skybox;
+    public MeshInstance[] allMeshes;
+    MeshInstance[] skybox;
     int skyColor;
 	
 	private Vector3D camPos = new Vector3D(), camRot = new Vector3D();
@@ -51,6 +53,10 @@ public class World {
     
     long renderTime;
     SpriteObject sobj;
+
+    public float scX=1;
+    public float scY=1;
+    public float scZ=1;
     
     public World(E3D e3d, MeshInstance[] meshes, int skyColor, MeshInstance[] skybox, boolean debug) {
         allMeshes = meshes;
@@ -270,8 +276,17 @@ public class World {
 		//todo hashmap?
         for(Entity obj : entities) {
             if(name.equals(obj.unicalID) || name.equals(obj.name)) return obj;
+            System.out.println(obj.name+"="+obj.getClass().getSimpleName());
         }
         
+        return null;
+    }
+
+    public MeshInstance findInstance(String name) {
+		//todo hashmap?
+        for(MeshInstance obj : allMeshes) {
+            if(name.equals(obj.mesh.name)) return obj;
+        }
         return null;
     }
 

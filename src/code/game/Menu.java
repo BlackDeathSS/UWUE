@@ -19,7 +19,7 @@ public class Menu extends Screen {
     
     private Main main;
     private ItemList menu;
-    public Texture background, logo;
+    public Texture background, logo, shadow;
     
     public Menu(Main main) {
         this.main = main;
@@ -31,8 +31,9 @@ public class Menu extends Screen {
         if(initialized) return;
         initialized = true;
         
-        background = main.e3d.getTexture("/images/SLR_casette.png", null);
+        background = main.e3d.getTexture("/images/menu.png", null);
         logo = main.e3d.getTexture("/images/lsddejfg.png", null);
+        //shadow = main.e3d.getTexture("/images/menushadow.png", null);
         
         main.musPlayer.loadFile("/music/menu.ogg");
         main.musPlayer.play();
@@ -55,7 +56,6 @@ public class Menu extends Screen {
             public void onEnter() {
                 main.musPlayer.setVolume(0);
                 main.musPlayer.stop();
-                main.gameStartS.play();
 
                 main.window.showCursor(false);
 
@@ -105,9 +105,9 @@ public class Menu extends Screen {
         
         int sizeb = Math.min(w, h);
         
-        long scrollXX = FPS.currentTime*(-100)/1000;
+        long scrollXX = FPS.currentTime*(-10)/1000;
         scrollXX -= (scrollXX/sizeb)*sizeb;
-        long scrollYY = FPS.currentTime*(100)/1000;
+        long scrollYY = FPS.currentTime*(10)/1000;
         scrollYY -= (scrollYY/sizeb)*sizeb;
         
         int bx = (int)(scrollXX % sizeb);
@@ -131,15 +131,18 @@ public class Menu extends Screen {
     
     public void tick() {
         drawBackground();
-                
+        
+        //main.hudRender.drawRect(shadow, 0, 0, w, h, 0xffffff, 1);
+        
         int logow = Math.min(h, w/2) * 3 / 4;
         int lx = (w/2 - logow) / 2;
         int ly = (h - logow) / 2;
         
-        float sin = (float)Math.sin(FPS.currentTime / 300f) * logow * 0.007f;
-        float cos = (float)Math.cos(FPS.currentTime / 300f) * logow * 0.007f;
+        float sin = (float)Math.sin(FPS.currentTime / 200f) * logow * 0.005f;
+        float cos = (float)Math.cos(FPS.currentTime / 200f) * logow * 0.005f;
         
         main.hudRender.drawRect(logo, lx+sin, ly+cos, logow, logow, 0, 1);
+        //main.hudRender.drawRect(logo, lx+sin, ly+cos, logow, logow, 0xffff00, 1);
         
         main.hudRender.drawRect(logo, lx, ly, logow, logow, 0xffffff, 1);
 

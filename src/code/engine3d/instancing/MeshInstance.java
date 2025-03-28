@@ -88,6 +88,13 @@ public class MeshInstance extends RenderInstance {
         tmpMat.get(modelMatrix);
         updateBB(modelMatrix);
     }
+
+    public void setScale(float x, float y, float z) {
+        tmpMat.identity();
+        buildMatrix(x, y, z, tmpMat);
+        tmpMat.get(modelMatrix);
+        updateBB(modelMatrix);
+    }
     
     public void setCamera(Matrix4f tmp, Matrix4f invCam) {
         tmpMat.set(invCam);

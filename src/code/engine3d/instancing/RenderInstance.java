@@ -92,4 +92,9 @@ public class RenderInstance {
         
         return tmp;
     }
+
+    public static Matrix4f buildMatrix(float x, float y, float z, Matrix4f tmp) {
+        tmp.scale(x, y, z);
+        return tmp;
+    }
 }

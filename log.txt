@@ -1,5 +1,6 @@
-ultra wacky
-UHHHHHHHHHHHHHHHHHHHHHHH.....
-engine
-
-(UWUE 0.1)
+<<<ENGINE RUNNING>>>
+ghost=MeshObject
+respawn=BoxEntity
+null=BoxEntity
+player=Player
+1

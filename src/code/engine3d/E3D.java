@@ -415,7 +415,7 @@ public class E3D {
         
         postDraw.clear();
     }
-    
+
     private static void sort(ArrayList<RenderInstance> list) {
         for(int i=list.size()-1; i>=1; i--) {
             RenderInstance nearest = null;

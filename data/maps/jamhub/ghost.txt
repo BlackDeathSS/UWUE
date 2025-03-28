@@ -1,0 +1,51 @@
+$if hasGun==1
+$go after_gun
+Ghost:*Ah, another visitor. Tell me... do you desire it?*
+$question gen nocap 2
+Yes
+No
+true
+true
+$go give_gun
+$go decline
+$end
+
+$give_gun:
+Ghost:*... good choice.*  
+$cmd hasGun=1
+You:*What the—?! This gun... it's covered in blood!*  
+$question gen nocap 3
+Whose blood is this?!
+Where did you find this?!
+(Say nothing)
+true
+true
+true
+$go blood
+$go location
+$go silence
+$end
+
+$blood:
+Ghost:*…Yours, of course.*  
+$go final
+
+$location:
+Ghost:*...*  
+$go final
+
+$silence:
+Ghost:*You'll know how to use it eventually… They all do.*  
+$go final
+
+$decline:
+Ghost:*Tsk... your loss...*  
+$end
+
+$final:
+You:*...What a strange guy… I hope I won’t have to use this.*
+$end
+
+$after_gun:
+Ghost:*Hope the trigger works...*
+$end

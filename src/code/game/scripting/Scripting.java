@@ -6,12 +6,13 @@ import code.audio.AudioEngine;
 
 import code.engine3d.game.lighting.Light;
 import code.engine3d.game.lighting.LightGroup;
+import code.engine3d.instancing.MeshInstance;
 import code.game.DialogScreen;
 import code.game.Fade;
 import code.game.Game;
 import code.game.Main;
 import code.game.Pause;
-
+import code.game.world.World;
 import code.game.world.entities.Entity;
 import code.game.world.entities.MeshObject;
 import code.game.world.entities.PhysEntity;
@@ -390,6 +391,14 @@ public class Scripting {
                 return LuaValue.NIL;
             }
         });
+
+        lua.set("debug", new ZeroArgFunction() {
+            public LuaValue call()  {
+				main.toggleDebug();
+                return LuaValue.NIL;
+            }
+        });
+        
         
         addEntitiesScripts(main, lua);
         
@@ -477,7 +486,22 @@ public class Scripting {
 				});
 			}
 		});
-        
+
+        lua.set("worldVar", new ThreeArgFunction() {
+            public LuaValue call(LuaValue obj, LuaValue var, LuaValue val)  {
+                Game game = main.getGame();
+                MeshInstance meshInstance = game != null?game.world.findInstance(obj.toString()):null;
+                String varName = var.toString();
+
+                if(varName.equals("scale")) {
+                    if(!val.isnil() && val.istable()) {
+                        meshInstance.setScale(val.get(1).tofloat(),val.get(2).tofloat(),val.get(3).tofloat());
+                    }
+                    return LuaValue.valueOf(val.get(1).tofloat());
+                }
+                return LuaValue.NIL;
+            }
+        });
         lua.set("objVar", new ThreeArgFunction() {
             public LuaValue call(LuaValue obj, LuaValue var, LuaValue val)  {
                 Game game = main.getGame();
@@ -494,7 +518,6 @@ public class Scripting {
                         (entity != null && entity instanceof Player)?(Player)entity:null;
                 
                 String varName = var.toString();
-                
                 if(entity == null) {
                     Light light = LightGroup.findLight(obj.toString());
                     
@@ -648,6 +671,13 @@ public class Scripting {
                         return LuaValue.valueOf(sprObj.visible);
                     }
                     
+                } else if(varName.equals("scale")&&meshObj != null) {
+                    if(meshObj != null) {
+                        if(!val.isnil() && val.istable()) {
+                            meshObj.setScale(val.get(1).tofloat(),val.get(2).tofloat(),val.get(3).tofloat());
+                        }
+                        return LuaValue.NIL;
+                    }
                 }
                 //Sound sources
                 else if(varName.equals("volume") && sndObj != null) {

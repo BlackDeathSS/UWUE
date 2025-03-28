@@ -3,6 +3,8 @@ package code.game;
 import code.engine.Window;
 import code.engine.Screen;
 
+import org.lwjgl.glfw.GLFW;
+
 import code.audio.AudioEngine;
 import code.audio.SoundSource;
 import code.engine.Engine;
@@ -10,6 +12,13 @@ import code.engine.Engine;
 import code.engine3d.E3D;
 import code.engine3d.HudRender;
 import code.engine3d.game.lighting.LightGroup;
+
+import java.util.LinkedList;
+
+import org.luaj.vm2.Globals;
+import org.luaj.vm2.LuaTable;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.JsePlatform;
 
 import code.game.world.entities.Player;
 
@@ -22,13 +31,6 @@ import code.utils.IniFile;
 import code.utils.Keys;
 import code.utils.StringTools;
 import code.utils.font.BMFont;
-
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.jse.JsePlatform;
-
-import org.lwjgl.glfw.GLFW;
 
 /**
  *
@@ -60,6 +62,9 @@ public class Main extends Screen {
     
     private TextBox textBox;
     private TextBox console;
+
+    private LinkedList<String> consoleHistory = new LinkedList<>();
+    private int historyIndex = -1;
     
     public static void main(String[] args) {
         Engine.init();
@@ -117,10 +122,6 @@ public class Main extends Screen {
         clickedS.set3D(false);
         clickedS.buffer.neverUnload = true;
         
-        gameStartS = new SoundSource("/sounds/game start.ogg");
-        gameStartS.set3D(false);
-        gameStartS.buffer.neverUnload = true;
-        
         e3d = new E3D(window);
         hudRender = new HudRender(e3d);
         
@@ -134,6 +135,7 @@ public class Main extends Screen {
         
         final Main main = this;
         
+
         console = new TextBox(this, font) {
             public void onCancel() {
                 super.onCancel();
@@ -142,19 +144,28 @@ public class Main extends Screen {
             
             public void onEnter() {
                 super.onEnter();
-
+                if (!text.trim().isEmpty()) {
+                    if (consoleHistory.isEmpty() || !consoleHistory.contains(text)) {
+                        consoleHistory.addFirst(text);
+                        if (consoleHistory.size() > 10) {
+                            consoleHistory.removeLast();
+                        }                    
+                    }
+                    historyIndex = -1;
+                }
+                
                 LuaValue val = Scripting.runScript(main, text);
-                if(!val.isnil()) {
+                if (!val.isnil()) {
                     System.out.println("bool " + val.toboolean());
                     System.out.println("int " + val.toint());
                     System.out.println("num " + val.todouble());
                     System.out.println("str " + val.tojstring());
                 }
-
+                
                 text = "";
+                System.out.println(consoleHistory.size());
             }
         }.setXYW(0, 0, getWidth());
-
         setScreen(new Menu(this));
         run();
     }
@@ -172,7 +183,6 @@ public class Main extends Screen {
         musPlayer.destroy();
         selectedS.destroy();
         clickedS.destroy();
-        gameStartS.destroy();
         
         AssetManager.destroyThings(AssetManager.ALL);
         
@@ -319,6 +329,22 @@ public class Main extends Screen {
         } else if(textBox != null && Keys.isThatBinding(key, ERASE)) {
             textBox.erase();
             return;
+        } else if(textBox != null && Keys.isThatBinding(key, Keys.UP)&&!consoleHistory.isEmpty()){
+            if (historyIndex < consoleHistory.size() - 1) {
+                historyIndex++;
+                textBox.setText(consoleHistory.get(historyIndex));
+            }
+            //System.out.println("INDEX: "+consoleHistory.get(historyIndex));
+
+        } else if(textBox != null && Keys.isThatBinding(key, Keys.DOWN)&&!consoleHistory.isEmpty()){
+            //System.out.println("INDEX: "+consoleHistory.get(historyIndex));
+            if (historyIndex > 0) {
+                historyIndex--;
+                textBox.setText(consoleHistory.get(historyIndex));
+            } else {
+                historyIndex = -1;
+                textBox.setText("");
+            }
         }
         
         if(textBox != null) return;
@@ -382,6 +408,10 @@ public class Main extends Screen {
 		font.baseScale = Math.max(
 				1f/* / font.getOriginalHeight()*/, 
 				Math.round(Math.min(w, h) * 30 / 768f / font.getOriginalBaseHeight()));
+    }
+
+    public void toggleDebug(){
+        conf.debug = !conf.debug;
     }
 
 }

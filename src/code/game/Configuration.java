@@ -81,6 +81,7 @@ public class Configuration {
         
         //Debug
         debug = conf.debug;
+
     }
     
     void load(int fwd, int fhd) {
@@ -120,6 +121,7 @@ public class Configuration {
         vrh = conf.getInt("screen", "vres_height", vrh);
         
         debug = conf.getInt("game", "debug", debug?1:0) == 1;
+
     }
     
     void save() {

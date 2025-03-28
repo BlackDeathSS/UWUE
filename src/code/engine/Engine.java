@@ -22,10 +22,7 @@ public class Engine {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
         
-        System.out.println("ultra wacky\n"
-                + "UHHHHHHHHHHHHHHHHHHHHHHH.....\n"
-                + "engine\n\n"
-                + "(UWUE 0.2)");
+        System.out.println("<<<ENGINE RUNNING>>>");
     }
     
     public static int[] getMonitorSize() {

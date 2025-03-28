@@ -23,6 +23,10 @@ public class MeshObject extends PhysEntity {
     public MeshInstance mesh;
     public boolean meshCollision = true;
     public boolean visible = true;
+
+    public float scX=1;
+    public float scY=1;
+    public float scZ=1;
     
     public MeshObject(MeshInstance mesh) {
         this.mesh = mesh;
@@ -53,6 +57,14 @@ public class MeshObject extends PhysEntity {
     public void physicsUpdate(World world) {
         super.physicsUpdate(world);
         mesh.setTransformation(pos, new Vector3D(0, rotY, 0));
+        mesh.setScale(scX, scY, scZ);
+    }
+
+    public void setScale(float x, float y, float z) {
+        scX = x;
+        scY = y;
+        scZ = z;
+        mesh.setScale(scX, scY, scZ);
     }
     
     public boolean rayCast(Ray ray, boolean onlyMeshes) {
@@ -91,10 +103,10 @@ public class MeshObject extends PhysEntity {
     
     public void render(E3D e3d, World world) {
         mesh.setTransformation(pos, new Vector3D(0, rotY, 0));
+        mesh.setScale(scX, scY, scZ);
         if(visible && Culling.visible(mesh.min, mesh.max) >= Culling.VISIBLE) {
             mesh.setCamera(world.m, e3d.invCam);
             mesh.render(e3d);
         }
     }
-
 }

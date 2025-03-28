@@ -32,7 +32,7 @@ public class Player extends PhysEntity {
             ((Keys.isPressed(STRAFE_RIGHT)?1:0) - (Keys.isPressed(STRAFE_LEFT)?1:0)) * speed
 		); 
         
-        if(Keys.isPressed(JUMP)) jump(50);
+        if(Keys.isPressed(JUMP)) jump(30);
         
         super.update(world);
     }
